@@ -23,7 +23,7 @@ This is a modern, full-stack Todo application featuring a React frontend and a N
     *   Analytics Dashboard: View stats like total todos, completion rate, and priority distribution.
     *   Due Date Reminders: Browser notifications for upcoming due dates (requires user permission).
     *   Export Todos: Download todos as JSON or CSV files.
-    *   Offline Support: Basic app shell caching using a Service Worker for faster loads and offline access to the application structure. (Todo data is not fully offline-synced yet).
+    *   Offline Support: Basic app shell caching using a Service Worker for faster loads and offline access to the application structure.
 
 **Backend (Node.js/Express & MongoDB):**
 *   RESTful API for CRUD operations on todos.
@@ -37,7 +37,7 @@ This is a modern, full-stack Todo application featuring a React frontend and a N
 
 ## Tech Stack
 
-*   **Frontend:** React (via CDN), JSX, Tailwind CSS, JavaScript (ES6+)
+*   **Frontend:** React (via CDN), JSX, Tailwind CSS, JavaScript (ES6+), Service Worker
 *   **Backend:** Node.js, Express.js, MongoDB, Mongoose
 *   **AI:** Google Gemini API (via `@google/generative-ai` SDK)
 *   **Authentication:** JSON Web Tokens (JWT), bcryptjs
@@ -47,25 +47,29 @@ This is a modern, full-stack Todo application featuring a React frontend and a N
 
 ```
 .
-├── middleware/
-│   ├── auth.js           # JWT authentication middleware
-│   └── errorHandler.js   # Centralized error handler
-├── models/
-│   ├── Todo.js           # Mongoose schema for Todos
-│   └── User.js           # Mongoose schema for Users
-├── routes/
-│   ├── api.js            # CRUD routes for Todos (protected)
-│   ├── auth.js           # User registration and login routes
-│   └── ai.js             # Routes for Gemini API interactions (protected)
-├── .env                    # Environment variables (ignored by Git)
-├── .env.example            # Template for .env file
-├── .gitignore              # Specifies intentionally untracked files
-├── app.js                  # Main frontend React application logic (served by index.html)
-├── index.html              # Main HTML file for the frontend
-├── package.json            # Backend dependencies and scripts
-├── README.md               # This file
-├── server.js               # Backend Express server setup
-└── sw.js                   # Service Worker for basic offline support (if implemented)
+├── backend/
+│   ├── node_modules/     # (Created locally, gitignored)
+│   ├── middleware/
+│   │   ├── auth.js
+│   │   └── errorHandler.js
+│   ├── models/
+│   │   ├── Todo.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── ai.js
+│   │   ├── api.js  # Todo routes
+│   │   └── auth.js
+│   ├── .env              # (Local environment variables, gitignored)
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js
+├── frontend/
+│   ├── app.js            # Main React application logic
+│   ├── index.html        # Main HTML file
+│   └── sw.js             # Service Worker script
+└── README.md             # This file
 ```
 
 ## Setup and Installation
@@ -83,18 +87,21 @@ This is a modern, full-stack Todo application featuring a React frontend and a N
    ```
 
 **2. Backend Setup:**
-   *   Navigate to the project root (if not already there).
+   *   Navigate to the `backend` directory:
+     ```bash
+     cd backend
+     ```
    *   Install backend dependencies:
      ```bash
      npm install
      ```
-   *   Create a `.env` file in the project root by copying `.env.example` (or creating it manually if `.env.example` is not present):
+   *   Create a `.env` file in the `backend/` directory by copying `backend/.env.example` (or creating it manually):
      ```bash
-     # If .env.example exists:
+     # If .env.example exists in backend/:
      cp .env.example .env
-     # Otherwise, create .env manually and add the following:
+     # Otherwise, create backend/.env manually
      ```
-   *   Edit the `.env` file and provide your specific configurations:
+   *   Edit the `backend/.env` file and provide your specific configurations:
      ```
      MONGODB_URI=your_mongodb_connection_string # e.g., mongodb://localhost:27017/ai_todo_app or your Atlas URI
      PORT=5000                                  # Port for the backend server
@@ -105,28 +112,29 @@ This is a modern, full-stack Todo application featuring a React frontend and a N
      **Important:** Ensure `JWT_SECRET` is a strong, unique random string for any production or publicly accessible deployment. `NODE_ENV=development` enables more detailed error messages. Set to `production` for deployed versions.
 
 **3. Frontend Setup:**
-   *   The frontend is primarily contained within `index.html` and `app.js`.
+   *   The frontend files (`index.html`, `app.js`, `sw.js`) are located in the `frontend/` directory.
    *   `index.html` uses CDN-hosted React, ReactDOM, Babel (for JSX transpilation in browser), and Tailwind CSS.
-   *   No separate build step is required for the frontend as `app.js` (containing React code) is directly included and transpiled by the browser.
+   *   No separate build step is required for the frontend.
 
 **4. Running the Application:**
    *   **Start the Backend Server:**
-     ```bash
-     npm start
-     ```
-     Or for development with auto-reloading (if nodemon is configured and installed):
-     ```bash
-     npm run dev
-     ```
-     The backend server will typically run on `http://localhost:5000` (or the port specified in `.env`). Check console output for the exact URL.
+     *   Navigate to the `backend/` directory.
+     *   Run:
+       ```bash
+       npm start
+       ```
+       Or for development with auto-reloading (if nodemon is configured):
+       ```bash
+       npm run dev
+       ```
+     The backend server will typically run on `http://localhost:5000` (or the port specified in `backend/.env`). Check console output for the exact URL.
    *   **Open the Frontend:**
-     *   Simply open the `index.html` file in your web browser (e.g., by dragging it to the browser window or using `File > Open`).
-     *   The frontend application in `app.js` will attempt to communicate with the backend server running at `http://localhost:PORT` (as configured).
-     *   Ensure your browser can make requests to the backend server (CORS is enabled on the backend by default for all origins).
+     *   Open the `frontend/index.html` file in your web browser.
+     *   The frontend application in `frontend/app.js` is configured to communicate with the backend at the `API_BASE_URL` (default `http://localhost:5000`). Ensure this matches your backend server's running address.
 
 ## API Documentation
 
-The backend exposes the following RESTful API endpoints. All endpoints under `/api/todos` and `/api/ai` require authentication (a JWT in the `x-auth-token` header).
+The backend exposes the following RESTful API endpoints. All endpoints under `/api/todos` and `/api/ai` require authentication (a JWT in the `x-auth-token` header). The base URL for these endpoints will be `http://localhost:PORT` (e.g., `http://localhost:5000/api/auth/login`).
 
 **Authentication (`/api/auth`)**
 *   `POST /register`
@@ -162,6 +170,10 @@ The backend exposes the following RESTful API endpoints. All endpoints under `/a
     *   Description: Gets AI-powered suggestions for a todo's title, description, and priority.
     *   Body: `{ "title": "Meeting notes", "description": "Discuss Q3 roadmap" }` (title and/or description)
     *   Response (200): `{ "suggestedTitle": "Finalize Q3 Roadmap Discussion Points", "suggestedDescription": "Compile detailed notes from the meeting to finalize the Q3 roadmap, including key decisions and action items.", "suggestedPriority": "High" }` (Fields are optional in response; only suggested changes are returned).
+*   `POST /refine-description`
+    *   Description: Gets AI-powered suggestions to refine a todo description.
+    *   Body: `{ "description": "Current todo description." }`
+    *   Response (200): `{ "suggestions": ["Refined suggestion 1", "Alternative phrasing 2"] }`
 *   `POST /motivational-quote`
     *   Description: Gets an AI-generated motivational quote.
     *   Body: (Empty)
@@ -181,9 +193,9 @@ This project demonstrates a range of skills valuable for full-stack and AI-focus
     *   Implementing basic caching for AI responses to manage costs and improve performance.
 *   **Modern JavaScript & React (without Create React App):** Direct use of React via CDNs, showcasing an understanding of how React works at a fundamental level, including JSX transpilation in the browser via Babel standalone. Use of React Hooks for state and lifecycle management.
 *   **Responsive UI/UX:** Consideration for user experience with features like dark/light mode, dynamic filtering and searching, clear user feedback (notifications, loading states), and responsive design principles using Tailwind CSS.
-*   **Advanced Frontend Features:** Implementation of browser APIs like Notifications API for due date reminders and file download for data export.
+*   **Advanced Frontend Features:** Implementation of browser APIs like Notifications API for due date reminders, file download for data export, and Service Workers for basic offline caching.
 *   **Problem Solving & Feature Development:** Design and development of a comprehensive set of features (CRUD, AI, auth, analytics, export, reminders) that go beyond a basic application.
-*   **Code Quality & Maintainability:** Modular project structure (separating routes, models, middleware), use of middleware for centralized concerns (authentication, error handling), and commented code for clarity.
+*   **Code Quality & Maintainability:** Modular project structure (separating frontend/backend, routes, models, middleware), use of middleware for centralized concerns (authentication, error handling), and commented code for clarity.
 *   **Software Development Lifecycle Awareness:** Understanding of setup (dependency management with npm, environment configuration with `.env`), development (use of `nodemon`), and considerations for deployment (e.g., `NODE_ENV` variable).
 *   **Error Handling:** Implementation of a centralized error handling middleware for consistent and informative error responses on the backend.
 *   **Innovation & User Engagement:** Leveraging AI to create a more intelligent, helpful, and engaging user experience compared to standard utility applications.
