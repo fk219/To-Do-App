@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styling from old index.html's <style> tag */
+html, body, #root {
+    height: 100%; /* Ensure the React root and body take full viewport height */
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden; /* Prevent scrolling on body; main content area will scroll */
+}
+
+/* Light Mode - Notion Inspired */
+body.light {
+    background-color: #FFFFFF;
+    color: #37352F;
+}
+/* Overrides for Tailwind dark variants when body.light is active */
+.light .dark\:text-gray-900 { color: #37352F !important; }
+.light .dark\:text-gray-200 { color: #37352F !important; } /* For lighter text in dark mode, make it dark in light */
+.light .dark\:text-gray-300 { color: #5E5C56 !important; }
+.light .dark\:text-gray-400 { color: #8A8882 !important; }
+
+.light .dark\:bg-gray-300 { background-color: #F1F1EF !important; color: #37352F !important; border-color: #E3E2E0 !important;}
+.light .dark\:bg-gray-600 { background-color: #E3E2E0 !important; } /* e.g. sidebar button hover */
+.light .dark\:bg-gray-700 { background-color: #EDEDEB !important; } /* e.g. sidebar button active, input bg */
+.light .dark\:bg-gray-700\/30 { background-color: rgba(237, 237, 235, 0.3) !important; } /* e.g. dashboard cards */
+.light .dark\:bg-gray-700\/50 { background-color: rgba(237, 237, 235, 0.5) !important; } /* e.g. todo item hover */
+.light .dark\:bg-gray-700\/60 { background-color: rgba(237, 237, 235, 0.6) !important; } /* e.g. AI suggestion item */
+.light .dark\:bg-gray-800 { background-color: #F7F7F5 !important; } /* e.g. sidebar, edit modal */
+.light .dark\:bg-gray-800\/50 { background-color: rgba(247, 247, 245, 0.5) !important; } /* e.g. top bar */
+.light .dark\:bg-gray-900 { background-color: #FFFFFF !important; } /* e.g. main content panel bg */
+
+
+.light .dark\:border-gray-500 { border-color: #D1D0CD !important; }
+.light .dark\:border-gray-600 { border-color: #E3E2E0 !important; } /* e.g. input border */
+.light .dark\:border-gray-700 { border-color: #E3E2E0 !important; } /* e.g. sidebar border, section border */
+.light .dark\:border-gray-700\/50 { border-color: rgba(227, 226, 224, 0.5) !important; }
+
+
+/* Specific theme color overrides for light mode, derived from app.js Tailwind classes */
+.light .dark\:bg-purple-800\/40 { background-color: rgba(233, 213, 255, 0.4) !important; } /* Lighter purple with opacity */
+.light .dark\:text-purple-300 { color: #6A1B9A !important; }
+.light .dark\:border-purple-700\/50 { border-color: rgba(170, 126, 218, 0.5) !important; }
+
+.light .dark\:bg-orange-800\/40 { background-color: rgba(255, 224, 178, 0.4) !important; } /* Lighter orange with opacity */
+.light .dark\:text-orange-300 { color: #E65100 !important; }
+.light .dark\:border-orange-700\/50 { border-color: rgba(245, 170, 100, 0.5) !important; }
+
+.light .dark\:bg-green-800\/30 { background-color: rgba(200, 230, 201, 0.3) !important;} /* Lighter green for notification banner */
+.light .dark\:border-green-700\/50 { border-color: rgba(129, 199, 132, 0.5) !important; }
+.light .dark\:text-green-200 { color: #2E7D32 !important; }
+.light .dark\:text-green-300 { color: #2E7D32 !important; } /* Used in SettingsView */
+.light .dark\:text-green-400 { color: #388E3C !important; } /* Used in DashboardView */
+
+
+.light .dark\:bg-red-800\/30 { background-color: rgba(255, 205, 210, 0.3) !important; }
+.light .dark\:border-red-700\/50 { border-color: rgba(239, 154, 154, 0.5) !important; }
+.light .dark\:text-red-200 { color: #C62828 !important; }
+.light .dark\:text-red-300 { color: #C62828 !important; } /* Used in SettingsView */
+.light .dark\:text-red-400 { color: #D32F2F !important; } /* Used in TodoItem */
+
+
+.light .dark\:bg-blue-800\/30 { background-color: rgba(187, 222, 251, 0.3) !important; }
+.light .dark\:border-blue-700\/50 { border-color: rgba(100, 181, 246, 0.5) !important; }
+.light .dark\:text-blue-200 { color: #1565C0 !important; }
+.light .dark\:text-blue-300 { color: #1565C0 !important; } /* Used in SettingsView */
+.light .dark\:text-blue-400 { color: #1976D2 !important; } /* Used in TodoItem */
+
+
+.light .dark\:text-yellow-300 { color: #FBC02D !important; } /* Used in SettingsView */
+.light .dark\:text-yellow-400 { color: #F9A825 !important; } /* Used in DashboardView */
+.light .dark\:bg-yellow-800\/60 { background-color: rgba(255, 249, 196, 0.6) !important; } /* Notification banner */
+.light .dark\:border-yellow-700 { border-color: #FDD835 !important; }
+
+
+.light .dark\:text-indigo-400 { color: #3949AB !important; } /* Used in DashboardView */
+.light .dark\:text-white { color: #37352F !important; } /* For sidebar title */
+
+
+/* Dark Mode - Notion Inspired */
+body.dark {
+    background-color: #191919;
+    color: rgba(255, 255, 255, 0.87);
+}
+/* Adjust Tailwind's default dark mode input styling if needed */
+/* These are already handled by inputSelectCommonClasses if it includes dark: variants,
+   but having them here ensures the body.dark context forces the Notion-like dark theme */
+.dark .dark\:text-gray-900 {
+    color: rgba(255, 255, 255, 0.87) !important;
+    background-color: #2B2B2B !important;
+    border-color: #3C3C3C !important;
+}
+.dark .dark\:bg-gray-300 {
+    background-color: #2B2B2B !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+    border-color: #3C3C3C !important;
+}
+.dark .border {
+     border-color: #3C3C3C !important; /* Default border for elements like Edit Modal */
+}
+/* Overriding specific Tailwind dark: classes that might be used in app.js */
+.dark .dark\:border-gray-600 { border-color: #3C3C3C !important; }
+.dark .dark\:border-gray-700 { border-color: #313131 !important; } /* Sidebar/section borders */
+.dark .dark\:border-transparent { border-color: transparent !important; } /* For todo items */
+
+
+/* Ensure elements explicitly styled for light theme get dark mode overrides */
+.dark .bg-white { background-color: #1E1E1E !important; } /* e.g. top bar */
+.dark .bg-gray-50 { background-color: #1E1E1E !important; } /* e.g. sidebar, add todo card, dashboard cards */
+.dark .hover\:bg-gray-100:hover { background-color: #2B2B2B !important; } /* e.g. sidebar menu toggle hover, todo item hover */
+.dark .hover\:bg-gray-200:hover { background-color: #3C3C3C !important; } /* e.g. nav link hover */
+
+.dark .text-gray-500 { color: #9E9E9E !important; }
+.dark .text-gray-600 { color: #B0B0B0 !important; }
+.dark .text-gray-700 { color: #C5C5C5 !important; } /* e.g. secondary button text */
+.dark .text-gray-800 { color: rgba(255, 255, 255, 0.87) !important; } /* e.g. primary todo text */
+
+.dark .border-gray-200 { border-color: #313131 !important; } /* e.g. AI suggestion box border */
+.dark .border-gray-300 { border-color: #3C3C3C !important; } /* e.g. secondary button border */
+.dark .border-gray-400 { border-color: #4A4A4A !important; } /* e.g. checkbox border */
+
+/* Specific theme color overrides for dark mode */
+.dark .bg-purple-50 { background-color: #2A1B30 !important; } /* AI suggestion box */
+.dark .text-purple-700 { color: #C390E8 !important; }
+.dark .border-purple-200 { border-color: #4A2F5D !important; }
+
+.dark .bg-orange-50 { background-color: #33261B !important; } /* AI suggestion box */
+.dark .text-orange-700 { color: #FFB570 !important; }
+.dark .border-orange-200 { border-color: #5D402A !important; }
+
+.dark .bg-yellow-50 { background-color: #332F1B !important; } /* Notification banner */
+.dark .text-yellow-700 { color: #FFDA7A !important; }
+.dark .border-yellow-200 { border-color: #5D522A !important; }
+.dark .border-yellow-300 { border-color: #5D522A !important; } /* Notification banner */
+
+.dark .bg-red-50 { background-color: #331E1E !important; } /* Notification banner */
+.dark .text-red-700 { color: #FF9B9B !important; }
+.dark .border-red-200 { border-color: #5D3535 !important; }
+.dark .border-red-300 { border-color: #5D3535 !important; } /* Notification banner */
+
+.dark .bg-green-50 { background-color: #1E2B1F !important; } /* Notification banner */
+.dark .text-green-700 { color: #88E6A0 !important; }
+.dark .border-green-200 { border-color: #354A36 !important; }
+.dark .border-green-300 { border-color: #354A36 !important; } /* Notification banner */
+
+.dark .bg-blue-50 { background-color: #1A2C3A !important; } /* Notification banner */
+.dark .text-blue-700 { color: #82C0FF !important; }
+.dark .border-blue-200 { border-color: #2A455D !important; }
+.dark .border-blue-300 { border-color: #2A455D !important; } /* Notification banner */
+
+/* Ensure text colors used in specific components are adapted */
+.dark .text-green-600 { color: #6CCEA0 !important; } /* Dashboard, priority badge */
+.dark .text-yellow-600 { color: #F9D423 !important; } /* Dashboard, priority badge */
+.dark .text-red-600 { color: #FF8A80 !important; } /* Dashboard, priority badge */
+.dark .text-indigo-600 { color: #A7A4FF !important; } /* Dashboard */
+.dark .text-blue-600 { color: #82C0FF !important; } /* Checkbox, links */
+
+
+/* Animation for motivational quote (from previous implementation) */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    10% { opacity: 1; transform: translateY(0) scale(1); }
+    85% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(20px) scale(0.95); }
+}
+.animate-fadeInOut {
+    animation: fadeInOut 5000ms ease-in-out forwards;
+}

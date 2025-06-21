@@ -1,127 +1,17 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Powered Todo App - Notion Style</title>
-
-    <!-- Google Fonts - Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.development.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.development.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        /* Base styling */
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            height: 100vh; /* Ensure body takes full viewport height */
-            overflow: hidden; /* Prevent scrolling on body, main content will scroll */
-        }
-
-        /* Light Mode - Notion Inspired */
-        body.light {
-            background-color: #FFFFFF; /* Notion's light background is typically pure white or very close */
-            color: #37352F; /* Notion's primary text color (dark gray/brown) */
-        }
-        /* Overrides for Tailwind dark variants when body.light is active */
-        .light .dark\:text-gray-900 { color: #37352F !important; }
-        .light .dark\:text-gray-200 { color: #37352F !important; }
-        .light .dark\:text-gray-300 { color: #5E5C56 !important; } /* Slightly lighter for secondary text */
-        .light .dark\:text-gray-400 { color: #8A8882 !important; } /* Even lighter for placeholders/tertiary */
-
-        .light .dark\:bg-gray-300 { background-color: #F1F1EF !important; color: #37352F !important; border-color: #E3E2E0 !important;}
-        .light .dark\:bg-gray-600 { background-color: #E3E2E0 !important; }
-        .light .dark\:bg-gray-700 { background-color: #EDEDEB !important; }
-        .light .dark\:bg-gray-800 { background-color: #F7F7F5 !important; } /* For main content cards */
-        .light .dark\:border-gray-500 { border-color: #D1D0CD !important; }
-        .light .dark\:border-gray-600 { border-color: #E3E2E0 !important; }
-
-        /* Specific theme color overrides for light mode */
-        .light .dark\:bg-purple-800 { background-color: #F4F0FF !important; } /* Lighter purple */
-        .light .dark\:text-purple-300 { color: #6A1B9A !important; } /* Darker purple text */
-        .light .dark\:bg-orange-800 { background-color: #FFF3E0 !important; } /* Lighter orange */
-        .light .dark\:text-orange-300 { color: #E65100 !important; } /* Darker orange text */
-        .light .dark\:bg-green-800 { background-color: #E8F5E9 !important; } /* Lighter green */
-        .light .dark\:border-green-600 { border-color: #A5D6A7 !important; }
-        .light .dark\:text-blue-300 { color: #1E88E5 !important; }
-        .light .dark\:text-green-300 { color: #4CAF50 !important; }
-        .light .dark\:text-yellow-300 { color: #FBC02D !important; }
-        .light .dark\:text-indigo-300 { color: #3949AB !important; }
-        .light .dark\:bg-slate-700 { background-color: #FFFFFF !important; } /* Dashboard cards */
-        .light .dark\:bg-slate-600 { background-color: #F7F7F5 !important; } /* Dashboard priority/avg time cards */
-
-
-        /* Dark Mode - Notion Inspired */
-        body.dark {
-            background-color: #191919; /* Notion's dark background */
-            color: rgba(255, 255, 255, 0.87); /* Adjusted for better readability based on Material Design (Notion is often ~0.81) */
-        }
-        .dark .dark\:text-gray-900 { /* Inputs that were dark text on light bg for Tailwind's default dark mode */
-            color: rgba(255, 255, 255, 0.87) !important;
-            background-color: #2B2B2B !important; /* Darker input background */
-            border-color: #3C3C3C !important;
-        }
-         .dark .dark\:bg-gray-300 { /* Inputs that were light gray for Tailwind's default dark mode */
-            background-color: #2B2B2B !important;
-            color: rgba(255, 255, 255, 0.87) !important;
-            border-color: #3C3C3C !important;
-        }
-        .dark .border { /* Default border color in dark mode for elements without specific dark:border-* */
-             border-color: #3C3C3C !important;
-        }
-        .dark .dark\:border-gray-600 { /* Overriding Tailwind's dark:border-gray-600 for our theme */
-            border-color: #3C3C3C !important;
-        }
-        .dark .dark\:border-gray-500 {
-             border-color: #4A4A4A !important;
-        }
-
-        /* Ensure elements styled for light theme explicitly get dark mode overrides */
-        .dark .bg-white { background-color: #1E1E1E !important; } /* Main content cards */
-        .dark .bg-gray-100 { background-color: #262626 !important; } /* Slightly off-main bg, like edit modal */
-        .dark .bg-gray-200 { background-color: #2B2B2B !important; } /* Lighter elements like some dashboard cards */
-        .dark .bg-gray-300 { background-color: #3C3C3C !important; } /* Toggle theme button */
-
-        .dark .bg-blue-100 { background-color: #1A2C3A !important; }
-        .dark .text-blue-700 { color: #82C0FF !important; }
-        .dark .bg-green-100 { background-color: #1A3223 !important; }
-        .dark .text-green-700 { color: #88E6A0 !important; }
-        .dark .bg-yellow-100 { background-color: #362F1B !important; }
-        .dark .text-yellow-700 { color: #FFDA7A !important; }
-        .dark .bg-indigo-100 { background-color: #2A2845 !important; }
-        .dark .text-indigo-700 { color: #B3B0FF !important; }
-        .dark .bg-purple-100 { background-color: #2F1F38 !important; }
-        .dark .text-purple-700, .dark .dark\:text-purple-300 { color: #D1A7FF !important; } /* Ensure this works if dark:text-purple-300 was used */
-        .dark .bg-orange-100 { background-color: #38281A !important; }
-        .dark .text-orange-700, .dark .dark\:text-orange-300 { color: #FFB570 !important; }
-
-        /* Override for completed todo item background in dark mode */
-        .dark .dark\:bg-green-700 { background-color: #1A3223 !important; } /* Original class was dark:bg-green-700 */
-        .dark .dark\:bg-green-800 { background-color: #1A3223 !important; } /* If dark:bg-green-800 was used */
-        .dark .dark\:border-green-600 { border-color: #2E4B37 !important; }
-
-
-        /* Animation for motivational quote (from previous implementation) */
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
-            10% { opacity: 1; transform: translateY(0) scale(1); }
-            85% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(20px) scale(0.95); }
-        }
-        .animate-fadeInOut {
-            animation: fadeInOut 5000ms ease-in-out forwards;
-        }
-    </style>
-</head>
-<body class="light"> <!-- Default to light mode -->
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Todo App - Vite</title>
+     <!-- Google Fonts - Inter -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
     <div id="root"></div>
-    <script type="text/babel" src="app.js"></script>
-</body>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
