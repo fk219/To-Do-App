@@ -180,15 +180,7 @@ const App = () => {
     const convertToCsv = (data) => { /* ... */ };
     const exportToCsv = () => { /* ... */ };
 
-    // Re-add full function bodies that were previously collapsed
-    fetchMotivationalQuote = async () => { setMotivationalQuote(''); setShowQuote(false); await new Promise(resolve => setTimeout(resolve, 100)); const quotes = ["The secret of getting ahead is getting started!", "Well done is better than well said."]; setMotivationalQuote(quotes[Math.floor(Math.random() * quotes.length)]); setShowQuote(true); if (window.quoteTimeout) clearTimeout(window.quoteTimeout); window.quoteTimeout = setTimeout(() => setShowQuote(false), 5000); };
-    addTodoAndEdit = () => { if (!newTodoTitle.trim()) return; const newId = todos.length > 0 ? Math.max(...todos.map(t => t.id)) + 1 : 1; const newTodo = { id: newId, title: newTodoTitle.trim(), description: '', dueDate: '', priority: 'Medium', completed: false, createdAt: new Date().toISOString() }; setTodos(prevTodos => [newTodo, ...prevTodos]); setNewTodoTitle(''); startEditTodo(newTodo); };
-    toggleComplete = (id) => { let todoWasJustCompleted = false; setTodos(prevTodos => prevTodos.map(todo => { if (todo.id === id) { if (!todo.completed) { todoWasJustCompleted = true; setNotifiedTodoIds(prevIds => new Set(prevIds).add(id)); } else { setNotifiedTodoIds(prevIds => { const newIds = new Set(prevIds); newIds.delete(id); return newIds; }); } return { ...todo, completed: !todo.completed }; } return todo; })); if (todoWasJustCompleted) fetchMotivationalQuote();  };
-    deleteTodo = (id) => { setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id)); setNotifiedTodoIds(prevIds => { const newIds = new Set(prevIds); newIds.delete(id); return newIds; }); };
-    startEditTodo = (todo) => { setEditingTodo({ ...todo }); setTitleSuggestion(''); setDescriptionSuggestion(''); setSuggestedPriority(''); setDescriptionAISuggestions([]); setIsDescriptionAISuggesting(false); setGeneralUserMessage({ text: '', type: '' });  };
-    saveEditTodo = () => { if (!editingTodo || !editingTodo.title.trim()) return; setTodos(prevTodos => prevTodos.map(todo => todo.id === editingTodo.id ? editingTodo : todo)); setEditingTodo(null); setDescriptionAISuggestions([]); setIsDescriptionAISuggesting(false); setGeneralUserMessage({ text: '', type: '' }); };
-    cancelEditTodo = () => { setEditingTodo(null); setDescriptionAISuggestions([]); setIsDescriptionAISuggesting(false); setGeneralUserMessage({ text: '', type: '' }); };
-    handleEditInputChange = (e) => { const { name, value } = e.target; setEditingTodo(prev => ({ ...prev, [name]: value })); };
+    // Ensure original const definitions are used and no re-assignments below
 
     const inputSelectCommonClasses = "border rounded p-2 w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400";
     const buttonPrimaryClasses = "bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-4 rounded text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900";
